@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOC Analyst Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1117;
+    --surface2: #111820;
+    --border: #1e2d3d;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --accent3: #39ff14;
+    --warn: #ffcc00;
+    --danger: #ff2d55;
+    --text: #c9d1d9;
+    --text-dim: #58677a;
+    --text-bright: #e6edf3;
+    --mono: 'Share Tech Mono', monospace;
+    --sans: 'Barlow', sans-serif;
+    --cond: 'Barlow Condensed', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,212,255,0.012) 2px,
+      rgba(0,212,255,0.012) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,212,255,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px;
+  }
+
+  .status-bar {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    background: var(--accent3);
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(57,255,20,0.4); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(57,255,20,0); }
+  }
+
+  h1 {
+    font-family: var(--cond);
+    font-size: clamp(42px, 7vw, 86px);
+    font-weight: 900;
+    line-height: 0.9;
+    color: var(--text-bright);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  h1 span {
+    color: var(--accent);
+    display: block;
+  }
+
+  .tagline {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 14px;
+    letter-spacing: 0.08em;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    background: rgba(0,212,255,0.04);
+    transition: all 0.2s;
+  }
+
+  .tag:hover {
+    border-color: var(--accent);
+    background: rgba(0,212,255,0.1);
+  }
+
+  .header-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-end;
+  }
+
+  .stat-box {
+    text-align: right;
+  }
+
+  .stat-num {
+    font-family: var(--cond);
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── NAV ── */
+  nav {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  nav ul {
+    display: flex;
+    list-style: none;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    gap: 0;
+    overflow-x: auto;
+  }
+
+  nav ul li a {
+    display: block;
+    padding: 14px 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+
+  nav ul li a:hover,
+  nav ul li a.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::before {
+    content: '//';
+    opacity: 0.4;
+  }
+
+  .section-title {
+    font-family: var(--cond);
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 900;
+    color: var(--text-bright);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    line-height: 1;
+  }
+
+  /* ── SECTION ── */
+  .portfolio-section {
+    margin-bottom: 80px;
+    padding-top: 20px;
+  }
+
+  /* ── CASE CARD ── */
+  .case-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .case-card:hover { border-color: rgba(0,212,255,0.3); }
+
+  .case-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+  }
+
+  .case-card.critical::before { background: var(--danger); }
+  .case-card.high::before { background: var(--accent2); }
+  .case-card.medium::before { background: var(--warn); }
+
+  .card-header {
+    padding: 20px 28px 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .severity-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .severity-badge.critical { background: rgba(255,45,85,0.15); color: var(--danger); border: 1px solid rgba(255,45,85,0.3); }
+  .severity-badge.high { background: rgba(255,107,53,0.15); color: var(--accent2); border: 1px solid rgba(255,107,53,0.3); }
+  .severity-badge.medium { background: rgba(255,204,0,0.15); color: var(--warn); border: 1px solid rgba(255,204,0,0.3); }
+  .severity-badge.info { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+
+  .case-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .card-title {
+    font-family: var(--cond);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-bright);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .verdict-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 5px 12px;
+    letter-spacing: 0.1em;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  .verdict-badge.tp { color: var(--danger); border-color: var(--danger); background: rgba(255,45,85,0.08); }
+  .verdict-badge.fp { color: var(--accent3); border-color: var(--accent3); background: rgba(57,255,20,0.08); }
+
+  .card-body { padding: 24px 28px; }
+
+  /* ── TABS (inside card) ── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    overflow-x: auto;
+  }
+
+  .tab-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 10px 18px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  /* ── LOG VIEWER ── */
+  .log-viewer {
+    background: #060a0e;
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .log-viewer::before {
+    content: attr(data-label);
+    position: absolute;
+    top: 8px; right: 12px;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .log-line { display: block; white-space: pre; }
+  .log-line .dim { color: var(--text-dim); }
+  .log-line .allow { color: var(--accent3); }
+  .log-line .deny { color: var(--danger); }
+  .log-line .warn { color: var(--warn); }
+  .log-line .highlight { color: var(--accent2); font-weight: bold; }
+  .log-line .critical-hit { color: var(--danger); background: rgba(255,45,85,0.1); display: inline-block; width: 100%; }
+  .log-line .ip-att { color: #ff6b35; }
+  .log-line .ip-srv { color: #00d4ff; }
+  .log-line .uri { color: #c792ea; }
+  .log-line .ok { color: var(--accent3); }
+  .log-line .notfound { color: var(--text-dim); }
+
+  /* ── FINDINGS GRID ── */
+  .findings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .finding-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 16px;
+    position: relative;
+  }
+
+  .finding-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0.3;
+  }
+
+  .finding-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .finding-value {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    word-break: break-all;
+  }
+
+  .finding-value.danger { color: var(--danger); }
+  .finding-value.warn { color: var(--warn); }
+  .finding-value.ok { color: var(--accent3); }
+
+  /* ── MITRE TAGS ── */
+  .mitre-block {
+    margin: 20px 0;
+  }
+
+  .mitre-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .mitre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .mitre-tag {
+    background: rgba(0,212,255,0.05);
+    border: 1px solid rgba(0,212,255,0.2);
+    padding: 8px 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .mitre-tag .tid {
+    color: var(--accent2);
+    margin-right: 6px;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+    margin: 16px 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 8px; bottom: 8px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--accent), transparent);
+  }
+
+  .tl-event {
+    position: relative;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+  }
+
+  .tl-event::before {
+    content: '';
+    position: absolute;
+    left: -24px; top: 18px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+
+  .tl-event.critical-event { border-color: rgba(255,45,85,0.3); }
+  .tl-event.critical-event::before { background: var(--danger); }
+
+  .tl-time {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .tl-desc {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .tl-desc code {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent2);
+    background: rgba(255,107,53,0.1);
+    padding: 1px 5px;
+  }
+
+  .tl-event.critical-event .tl-time { color: var(--danger); }
+
+  /* ── RECOMMENDATIONS ── */
+  .rec-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .rec-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .rec-icon {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 7px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  .rec-icon.isolate { background: rgba(255,45,85,0.15); color: var(--danger); }
+  .rec-icon.block { background: rgba(255,107,53,0.15); color: var(--accent2); }
+  .rec-icon.escalate { background: rgba(255,204,0,0.15); color: var(--warn); }
+  .rec-icon.evidence { background: rgba(0,212,255,0.1); color: var(--accent); }
+
+  /* ── TOOLS SECTION ── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .tool-card:hover {
+    border-color: rgba(0,212,255,0.3);
+    transform: translateY(-2px);
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  .tool-icon {
+    font-family: var(--mono);
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .tool-name {
+    font-family: var(--cond);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-bright);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .tool-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .tool-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tool-skill {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    background: rgba(0,212,255,0.05);
+    border: 1px solid rgba(0,212,255,0.15);
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ABOUT SECTION ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .about-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .about-text p { margin-bottom: 16px; }
+
+  .cert-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .cert-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cert-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(30,45,61,0.5);
+    font-size: 13px;
+  }
+
+  .cert-item:last-child { border-bottom: none; }
+
+  .cert-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  /* ── ANSWER BLOCK ── */
+  .answer-block {
+    margin: 16px 0;
+  }
+
+  .answer-q {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .answer-q::before {
+    content: 'Q:';
+    color: var(--warn);
+    flex-shrink: 0;
+  }
+
+  .answer-a {
+    font-size: 13px;
+    color: var(--text);
+    padding: 10px 14px;
+    background: var(--surface2);
+    border-left: 2px solid var(--accent);
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+
+  .answer-a code {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent2);
+    background: rgba(255,107,53,0.08);
+    padding: 2px 6px;
+  }
+
+  .answer-a strong { color: var(--text-bright); }
+
+  /* responsive */
+  @media (max-width: 768px) {
+    header, main, footer { padding-left: 20px; padding-right: 20px; }
+    nav ul { padding: 0 20px; }
+    .header-grid { grid-template-columns: 1fr; }
+    .header-stats { flex-direction: row; align-items: flex-start; }
+    .about-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 48px; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .case-card {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .case-card:nth-child(2) { animation-delay: 0.1s; }
+  .case-card:nth-child(3) { animation-delay: 0.2s; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-grid">
+    <div>
+      <div class="status-bar">
+        <span class="status-dot"></span>
+        ONLINE &nbsp;|&nbsp; SOC TIER 1 ANALYST &nbsp;|&nbsp; THREAT HUNTER
+      </div>
+      <h1>Security<span>Portfolio</span></h1>
+      <p class="tagline">// Log Analysis · Threat Detection · Incident Response · MITRE ATT&CK Mapping</p>
+      <div class="skill-tags">
+        <span class="tag">Wireshark</span>
+        <span class="tag">Splunk</span>
+        <span class="tag">MITRE ATT&CK</span>
+        <span class="tag">Log Correlation</span>
+        <span class="tag">Network Forensics</span>
+        <span class="tag">Incident Response</span>
+        <span class="tag">Threat Hunting</span>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="stat-box">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Case Studies</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">True Positive Rate</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <ul>
+    <li><a href="#about" class="active">About</a></li>
+    <li><a href="#cases">Case Studies</a></li>
+    <li><a href="#tools">Tools</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- ABOUT -->
+  <section class="portfolio-section" id="about">
+    <div class="section-label">Background</div>
+    <div class="section-title">About Me</div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm a <strong style="color:var(--text-bright)">Tier 1 SOC Analyst</strong> with hands-on experience in threat detection, log analysis, and incident response. I specialise in correlating multi-source log data to reconstruct attack timelines and escalate findings with clarity and precision.</p>
+        <p>My toolkit spans network packet analysis with <strong style="color:var(--text-bright)">Wireshark</strong>, SIEM querying and dashboarding in <strong style="color:var(--text-bright)">Splunk</strong>, and structured threat mapping using the <strong style="color:var(--text-bright)">MITRE ATT&CK framework</strong>. I approach every alert — fired or unfired — as a potential story waiting to be read from the logs.</p>
+        <p>This portfolio documents real analytical exercises: raw log files, my investigative process, findings, and recommendations — the same deliverables produced in a live SOC environment.</p>
+      </div>
+      <div>
+        <div class="cert-block">
+          <div class="cert-title">// Competencies</div>
+          <div class="cert-item"><span class="cert-dot"></span>Firewall &amp; Web Server Log Analysis</div>
+          <div class="cert-item"><span class="cert-dot"></span>Multi-source Log Correlation</div>
+          <div class="cert-item"><span class="cert-dot"></span>MITRE ATT&amp;CK Tactic/Technique Mapping</div>
+          <div class="cert-item"><span class="cert-dot"></span>Web Shell Detection</div>
+          <div class="cert-item"><span class="cert-dot"></span>Network Reconnaissance Detection</div>
+          <div class="cert-item"><span class="cert-dot"></span>Incident Triage &amp; Escalation</div>
+          <div class="cert-item"><span class="cert-dot"></span>Splunk SPL Query Writing</div>
+          <div class="cert-item"><span class="cert-dot"></span>Packet Capture Analysis (Wireshark)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASES -->
+  <section class="portfolio-section" id="cases">
+    <div class="section-label">Investigations</div>
+    <div class="section-title">Case Studies</div>
+
+    <!-- ══════════════════════════════════
+         CASE 1 — THE WEB SHELL
+    ══════════════════════════════════ -->
+    <div class="case-card critical">
+      <div class="card-header">
+        <div>
+          <div class="card-meta">
+            <span class="severity-badge critical">CRITICAL</span>
+            <span class="case-id">CASE-001 &nbsp;·&nbsp; 2025-XX-XX 14:30 UTC</span>
+          </div>
+          <div class="card-title" style="margin-top:8px">Operation Web Shell — Threat Hunt: www.company.com</div>
+        </div>
+        <span class="verdict-badge tp">TRUE POSITIVE</span>
+      </div>
+
+      <div class="card-body">
+        <!-- Tabs -->
+        <div class="tabs">
+          <button class="tab-btn active" onclick="openTab(event,'c1-scenario')">Scenario</button>
+          <button class="tab-btn" onclick="openTab(event,'c1-logs')">Raw Logs</button>
+          <button class="tab-btn" onclick="openTab(event,'c1-analysis')">Analysis</button>
+          <button class="tab-btn" onclick="openTab(event,'c1-mitre')">MITRE ATT&CK</button>
+          <button class="tab-btn" onclick="openTab(event,'c1-rec')">Recommendations</button>
+        </div>
+
+        <!-- Scenario Tab -->
+        <div class="tab-pane active" id="c1-scenario">
+          <p style="font-size:14px;line-height:1.7;color:var(--text);margin-bottom:20px">
+            As a Tier 1 Analyst on a routine threat hunt, the web team reported the main company website
+            (<strong style="color:var(--text-bright)">www.company.com / 10.0.0.5</strong>) felt slow — but no automated alerts had fired.
+            With no SIEM hit to guide us, I pulled one hour of raw firewall and web server logs and began a manual correlation analysis.
+            The investigation uncovered a full attacker lifecycle: reconnaissance → exploitation → web shell deployment → command execution.
+          </p>
+          <div class="findings-grid">
+            <div class="finding-item">
+              <div class="finding-label">Attacker IP</div>
+              <div class="finding-value danger">88.198.5.10</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">Target Server</div>
+              <div class="finding-value">10.0.0.5 (www.company.com)</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">Attack Vector</div>
+              <div class="finding-value warn">Port 80 (HTTP)</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">Payload</div>
+              <div class="finding-value danger">/uploads/shell.php</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">Command Executed</div>
+              <div class="finding-value danger">whoami</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">User-Agent</div>
+              <div class="finding-value warn">curl/7.68</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logs Tab -->
+        <div class="tab-pane" id="c1-logs">
+          <p style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-bottom:12px;letter-spacing:0.1em">// LOG SOURCE 1 — FIREWALL.LOG &nbsp;·&nbsp; FORMAT: Timestamp | action | src_ip | dest_ip | dest_port</p>
+          <div class="log-viewer" data-label="firewall.log">
+<span class="log-line"><span class="dim">14:28:01</span> | <span class="allow">ALLOW</span> | <span class="dim">100.17.5.10</span> | <span class="dim">17.1.0.5</span>  | 53</span>
+<span class="log-line"><span class="dim">14:30:01</span> | <span class="deny">DENY</span>  | <span class="ip-att">88.198.5.10</span> | <span class="ip-srv">10.0.0.5</span>  | <span class="highlight">22</span>   ← SSH blocked</span>
+<span class="log-line"><span class="dim">14:30:02</span> | <span class="deny">DENY</span>  | <span class="ip-att">88.198.5.10</span> | <span class="ip-srv">10.0.0.5</span>  | <span class="highlight">3389</span> ← RDP blocked</span>
+<span class="log-line"><span class="dim">14:30:03</span> | <span class="deny">DENY</span>  | <span class="ip-att">88.198.5.10</span> | <span class="ip-srv">10.0.0.5</span>  | <span class="highlight">445</span>  ← SMB blocked</span>
+<span class="log-line"><span class="dim">14:30:04</span> | <span class="allow">ALLOW</span> | <span class="ip-att">88.198.5.10</span> | <span class="ip-srv">10.0.0.5</span>  | 80   ← HTTP open</span>
+<span class="log-line"><span class="dim">14:30:05</span> | <span class="allow">ALLOW</span> | <span class="ip-att">88.198.5.10</span> | <span class="ip-srv">10.0.0.5</span>  | 80</span>
+<span class="log-line"><span class="dim">14:30:06</span> | <span class="allow">ALLOW</span> | <span class="ip-att">88.198.5.10</span> | <span class="ip-srv">10.0.0.5</span>  | 80</span>
+<span class="log-line"><span class="dim">14:30:07</span> | <span class="allow">ALLOW</span> | <span class="ip-att">88.198.5.10</span> | <span class="ip-srv">10.0.0.5</span>  | 80</span>
+<span class="log-line"><span class="dim">14:30:08</span> | <span class="allow">ALLOW</span> | <span class="ip-att">88.198.5.10</span> | <span class="ip-srv">10.0.0.5</span>  | 80</span>
+<span class="log-line"><span class="dim">14:30:09</span> | <span class="allow">ALLOW</span> | <span class="ip-att">88.198.5.10</span> | <span class="ip-srv">10.0.0.5</span>  | 80</span>
+<span class="log-line"><span class="dim">14:30:10</span> | <span class="allow">ALLOW</span> | <span class="ip-att">88.198.5.10</span> | <span class="ip-srv">10.0.0.5</span>  | 80</span>
+          </div>
+
+          <p style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin:20px 0 12px;letter-spacing:0.1em">// LOG SOURCE 2 — WEBSERVER.LOG &nbsp;·&nbsp; FORMAT: Timestamp | src_ip | method | uri | status_code | user_agent</p>
+          <div class="log-viewer" data-label="webserver.log">
+<span class="log-line"><span class="dim">14:30:04</span> | <span class="ip-att">88.198.5.10</span> | GET  | <span class="uri">/index.html</span>                           | <span class="ok">200</span> | curl/7.68</span>
+<span class="log-line"><span class="dim">14:30:05</span> | <span class="ip-att">88.198.5.10</span> | GET  | <span class="uri">/admin.php</span>                            | <span class="notfound">404</span> | curl/7.68  ← recon</span>
+<span class="log-line"><span class="dim">14:30:06</span> | <span class="ip-att">88.198.5.10</span> | GET  | <span class="uri">/config.txt</span>                           | <span class="notfound">404</span> | curl/7.68  ← recon</span>
+<span class="log-line"><span class="dim">14:30:07</span> | <span class="ip-att">88.198.5.10</span> | GET  | <span class="uri">/backup.zip</span>                           | <span class="notfound">404</span> | curl/7.68  ← recon</span>
+<span class="log-line"><span class="dim">14:30:08</span> | <span class="ip-att">88.198.5.10</span> | GET  | <span class="uri">/upload.php</span>                           | <span class="ok">200</span> | curl/7.68  ← found!</span>
+<span class="log-line"><span class="dim">14:30:09</span> | <span class="ip-att">88.198.5.10</span> | POST | <span class="uri">/upload.php</span>                           | <span class="ok">200</span> | curl/7.68  ← shell uploaded</span>
+<span class="log-line"><span class="critical-hit"><span class="dim">14:30:10</span> | <span class="ip-att">88.198.5.10</span> | GET  | <span class="uri">/uploads/shell.php?cmd=whoami</span>          | <span class="ok">200</span> | curl/7.68  ← SMOKING GUN</span></span>
+          </div>
+        </div>
+
+        <!-- Analysis Tab -->
+        <div class="tab-pane" id="c1-analysis">
+
+          <p style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-bottom:20px;letter-spacing:0.1em">// ATTACK TIMELINE RECONSTRUCTION</p>
+          <div class="timeline">
+            <div class="tl-event">
+              <div class="tl-time">14:30:01 – 14:30:03</div>
+              <div class="tl-desc">Attacker (<code>88.198.5.10</code>) attempts to connect to ports <code>22</code> (SSH), <code>3389</code> (RDP), and <code>445</code> (SMB). All three are <strong>DENIED</strong> by the firewall — standard lateral movement / initial access probing.</div>
+            </div>
+            <div class="tl-event">
+              <div class="tl-time">14:30:04</div>
+              <div class="tl-desc">Port <code>80</code> (HTTP) is open. Attacker pivots to web attack surface. First GET to <code>/index.html</code> — <code>200 OK</code> — confirms server is live.</div>
+            </div>
+            <div class="tl-event">
+              <div class="tl-time">14:30:05 – 14:30:07</div>
+              <div class="tl-desc">Attacker uses <code>curl/7.68</code> to probe for sensitive files: <code>/admin.php</code>, <code>/config.txt</code>, <code>/backup.zip</code>. All return <code>404</code> — active reconnaissance / directory brute-forcing in progress.</div>
+            </div>
+            <div class="tl-event">
+              <div class="tl-time">14:30:08</div>
+              <div class="tl-desc">GET request to <code>/upload.php</code> returns <code>200 OK</code>. A file upload endpoint has been discovered — this is the attack vector.</div>
+            </div>
+            <div class="tl-event critical-event">
+              <div class="tl-time">14:30:09 — EXPLOITATION</div>
+              <div class="tl-desc">POST request to <code>/upload.php</code> — the attacker uploads a malicious PHP web shell file (<code>shell.php</code>) to the server via the unsecured upload endpoint.</div>
+            </div>
+            <div class="tl-event critical-event">
+              <div class="tl-time">14:30:10 — COMMAND EXECUTION</div>
+              <div class="tl-desc">GET to <code>/uploads/shell.php?cmd=whoami</code> returns <code>200</code>. The web shell is live and executing OS commands. The attacker is testing their access level with <code>whoami</code>. <strong style="color:var(--danger)">Server is fully compromised.</strong></div>
+            </div>
+          </div>
+
+          <hr class="divider">
+          <p style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-bottom:20px;letter-spacing:0.1em">// DETAILED QUESTION ANALYSIS</p>
+
+          <!-- Q1 -->
+          <div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.1em;margin-bottom:12px;margin-top:8px">[ 1 ] FIREWALL ANALYSIS</div>
+          <div class="answer-block">
+            <div class="answer-q">What is the attacker's IP and the server's IP?</div>
+            <div class="answer-a">Attacker IP: <code>88.198.5.10</code> — identified by three rapid DENY hits on non-HTTP ports followed by sustained HTTP traffic to the web server. Server IP: <code>10.0.0.5</code> (www.company.com).</div>
+
+            <div class="answer-q">What 3 ports did the attacker try to connect to that were blocked?</div>
+            <div class="answer-a">Ports <code>22</code> (SSH), <code>3389</code> (RDP), and <code>445</code> (SMB) — all DENIED. This is characteristic of a port scan targeting high-value remote access and file-sharing services before pivoting to the web application.</div>
+
+            <div class="answer-q">What is one port that was open?</div>
+            <div class="answer-a">Port <code>80</code> (HTTP) — ALLOWed. The attacker pivoted entirely to this vector after the other ports were blocked.</div>
+          </div>
+
+          <!-- Q2 -->
+          <div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.1em;margin-bottom:12px;margin-top:24px">[ 2 ] WEB SERVER ANALYSIS</div>
+          <div class="answer-block">
+            <div class="answer-q">What 3 filenames did the attacker look for that did not exist?</div>
+            <div class="answer-a"><code>/admin.php</code>, <code>/config.txt</code>, and <code>/backup.zip</code> — all returning <code>404 Not Found</code>. These are common targets in web directory enumeration attacks (sensitive admin panels, configuration files, database backups).</div>
+
+            <div class="answer-q">What filename did they find that did exist?</div>
+            <div class="answer-a"><code>/upload.php</code> — returned <code>200 OK</code>. This unsecured file upload endpoint became the primary attack vector for deploying the web shell.</div>
+
+            <div class="answer-q">What user_agent is the attacker using? Is it a normal browser?</div>
+            <div class="answer-a"><code>curl/7.68</code> — this is a command-line HTTP tool, not a browser. No legitimate end user browses a website using curl. This strongly indicates automated/scripted attack activity, and combined with the 404 enumeration pattern, is a high-confidence indicator of malicious behaviour.</div>
+          </div>
+
+          <!-- Q3 -->
+          <div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.1em;margin-bottom:12px;margin-top:24px">[ 3 ] THE BREACH — LOG CORRELATION</div>
+          <div class="answer-block">
+            <div class="answer-q">At 14:30:09, the attacker makes a POST request. What were they doing?</div>
+            <div class="answer-a">The POST to <code>/upload.php</code> is the web shell being uploaded. Having confirmed the endpoint is live (14:30:08 GET returned 200), the attacker used curl to POST a malicious PHP file — <code>shell.php</code> — to the server. The server accepted it (200 OK), placing a remote code execution backdoor on the filesystem.</div>
+
+            <div class="answer-q">At 14:30:10, the "smoking gun" appears. What is the full URI?</div>
+            <div class="answer-a">Full URI: <code>/uploads/shell.php?cmd=whoami</code> — The shell was deposited in the <code>/uploads/</code> directory (a common misconfiguration where uploaded files are web-accessible and executable). The attacker immediately queried it with a test command via the <code>cmd</code> parameter.</div>
+
+            <div class="answer-q">What specific command did the attacker run?</div>
+            <div class="answer-a"><code>whoami</code> — a standard privilege discovery command. The attacker is checking what user account the web server process is running as (e.g., <strong>www-data</strong>, <strong>root</strong>, etc.). This determines whether privilege escalation is needed before moving further.</div>
+          </div>
+        </div>
+
+        <!-- MITRE Tab -->
+        <div class="tab-pane" id="c1-mitre">
+          <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:24px">Two distinct MITRE ATT&CK techniques are identifiable in this attack chain, mapped below with supporting evidence from the logs.</p>
+
+          <div class="mitre-block">
+            <div class="mitre-title">// Identified Tactics &amp; Techniques</div>
+            <div style="display:flex;flex-direction:column;gap:16px">
+
+              <div style="background:var(--surface2);border:1px solid var(--border);padding:18px">
+                <div class="mitre-tags" style="margin-bottom:12px">
+                  <span class="mitre-tag"><span class="tid">TA0043</span>Reconnaissance</span>
+                  <span class="mitre-tag"><span class="tid">T1595</span>Active Scanning</span>
+                </div>
+                <p style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:10px">The stream of <code style="font-family:var(--mono);color:var(--accent2)">404</code> errors from GET requests to <code style="font-family:var(--mono);color:var(--accent2)">/admin.php</code>, <code style="font-family:var(--mono);color:var(--accent2)">/config.txt</code>, and <code style="font-family:var(--mono);color:var(--accent2)">/backup.zip</code> represents active web directory enumeration — the attacker is systematically probing for sensitive or exploitable resources on the target server.</p>
+                <p style="font-size:13px;color:var(--text-dim);line-height:1.6">This is consistent with automated directory brute-forcing tools (common ones include gobuster, dirbuster, ffuf). The use of <code style="font-family:var(--mono);color:var(--text-dim)">curl/7.68</code> as the user-agent confirms scripted, non-human browsing behaviour. The attacker was probing for vulnerabilities and entry points before committing to an exploitation path.</p>
+              </div>
+
+              <div style="background:var(--surface2);border:1px solid rgba(255,45,85,0.2);padding:18px">
+                <div class="mitre-tags" style="margin-bottom:12px">
+                  <span class="mitre-tag"><span class="tid">TA0003</span>Persistence</span>
+                  <span class="mitre-tag"><span class="tid">T1505.003</span>Web Shell</span>
+                  <span class="mitre-tag"><span class="tid">TA0011</span>Command &amp; Control</span>
+                </div>
+                <p style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:10px">The deployment of <code style="font-family:var(--mono);color:var(--danger)">/uploads/shell.php</code> is a textbook Web Shell (T1505.003). A web shell is a malicious script placed on a compromised web server that allows an attacker to execute arbitrary OS commands remotely through HTTP requests — effectively turning the web server into a C2 node.</p>
+                <p style="font-size:13px;color:var(--text-dim);line-height:1.6">The <code style="font-family:var(--mono);color:var(--text-dim)">?cmd=whoami</code> query parameter is the classic interface of a PHP web shell. This technique is dangerous because it blends into legitimate web traffic on port 80/443, often bypassing perimeter firewall rules. It also establishes persistence — the shell remains on the server until manually removed.</p>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="findings-grid" style="margin-top:24px">
+            <div class="finding-item">
+              <div class="finding-label">Attack Phase 1</div>
+              <div class="finding-value">Reconnaissance (T1595)</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">Attack Phase 2</div>
+              <div class="finding-value warn">Initial Access via Upload (T1190)</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">Attack Phase 3</div>
+              <div class="finding-value danger">Web Shell Exec (T1505.003)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommendations Tab -->
+        <div class="tab-pane" id="c1-rec">
+          <div style="margin-bottom:20px">
+            <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(255,45,85,0.1);border:1px solid rgba(255,45,85,0.3);padding:10px 16px;margin-bottom:20px">
+              <span style="font-family:var(--mono);font-size:12px;color:var(--danger);letter-spacing:0.1em">⚠ VERDICT: TRUE POSITIVE — ACTIVE COMPROMISE</span>
+            </div>
+            <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:20px">
+              This is unambiguously a <strong style="color:var(--danger)">True Positive</strong>. The evidence chain is complete: port scan → web directory enumeration → upload endpoint discovery → web shell upload → OS command execution. There is no plausible benign explanation for a <code style="font-family:var(--mono);color:var(--accent2)">curl</code> client posting files to an upload endpoint and immediately querying a PHP file with OS commands. Immediate containment and escalation are required.
+            </p>
+          </div>
+
+          <ul class="rec-list">
+            <li>
+              <span class="rec-icon isolate">ISOLATE</span>
+              <div>
+                <strong style="color:var(--text-bright);display:block;margin-bottom:4px">Isolate the Web Server (10.0.0.5)</strong>
+                Immediately remove <code style="font-family:var(--mono);color:var(--accent2)">10.0.0.5</code> from the network. The web shell is live — every second it remains connected is a second the attacker can escalate privileges, exfiltrate data, or pivot to internal systems. Do not shut the server down; isolate it to preserve volatile memory and log forensic evidence.
+              </div>
+            </li>
+            <li>
+              <span class="rec-icon escalate">ESCALATE</span>
+              <div>
+                <strong style="color:var(--text-bright);display:block;margin-bottom:4px">Escalate to the Incident Response Team (IRT)</strong>
+                This incident exceeds Tier 1 scope. Escalate immediately with a full timeline, IOCs (attacker IP, shell path, commands run), and log evidence. The IRT will lead forensic investigation, determine full blast radius, and manage remediation.
+              </div>
+            </li>
+            <li>
+              <span class="rec-icon block">BLOCK</span>
+              <div>
+                <strong style="color:var(--text-bright);display:block;margin-bottom:4px">Block Attacker IP at Firewall — 88.198.5.10</strong>
+                Create a firewall rule to block all inbound traffic originating from <code style="font-family:var(--mono);color:var(--accent2)">88.198.5.10</code> across all ports. This prevents the attacker from reaching any other internal resources. Also consider adding this IP to a threat intelligence blocklist and cross-checking it against other log sources to identify any other systems it may have touched.
+              </div>
+            </li>
+            <li>
+              <span class="rec-icon evidence">PRESERVE</span>
+              <div>
+                <strong style="color:var(--text-bright);display:block;margin-bottom:4px">Preserve Evidence — Do Not Wipe</strong>
+                Before any remediation, preserve disk images, memory dumps, and all relevant log files. The <code style="font-family:var(--mono);color:var(--accent2)">whoami</code> command suggests the attacker may still be in the reconnaissance phase — a forensic review of what they accessed is critical to assessing the full scope of the breach.
+              </div>
+            </li>
+          </ul>
+        </div>
+
+      </div><!-- card-body end -->
+    </div><!-- case-card end -->
+
+
+    <!-- ══════════════════════════════════
+         CASE 2 — WIRESHARK PCAP ANALYSIS
+    ══════════════════════════════════ -->
+    <div class="case-card high">
+      <div class="card-header">
+        <div>
+          <div class="card-meta">
+            <span class="severity-badge high">HIGH</span>
+            <span class="case-id">CASE-002 &nbsp;·&nbsp; Network Forensics</span>
+          </div>
+          <div class="card-title" style="margin-top:8px">Suspicious Outbound Traffic — Wireshark PCAP Analysis</div>
+        </div>
+        <span class="verdict-badge tp">TRUE POSITIVE</span>
+      </div>
+      <div class="card-body">
+        <div class="tabs">
+          <button class="tab-btn active" onclick="openTab(event,'c2-overview')">Overview</button>
+          <button class="tab-btn" onclick="openTab(event,'c2-analysis')">Analysis</button>
+          <button class="tab-btn" onclick="openTab(event,'c2-mitre')">MITRE ATT&CK</button>
+        </div>
+
+        <div class="tab-pane active" id="c2-overview">
+          <p style="font-size:14px;line-height:1.7;color:var(--text);margin-bottom:20px">
+            An alert from the network monitoring team flagged <strong style="color:var(--text-bright)">anomalous outbound DNS queries</strong> from an internal workstation (<code style="font-family:var(--mono);color:var(--accent2)">192.168.1.45</code>). A packet capture was taken and loaded into <strong style="color:var(--text-bright)">Wireshark</strong> for analysis. The volume and structure of DNS queries suggested data exfiltration via DNS tunnelling.
+          </p>
+          <div class="findings-grid">
+            <div class="finding-item">
+              <div class="finding-label">Source Host</div>
+              <div class="finding-value danger">192.168.1.45</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">Protocol Abused</div>
+              <div class="finding-value warn">DNS (Port 53)</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">Suspicious Domain</div>
+              <div class="finding-value danger">exfil.attacker-c2.net</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">Query Volume</div>
+              <div class="finding-value warn">847 queries / 10 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane" id="c2-analysis">
+          <p style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-bottom:16px;letter-spacing:0.1em">// WIRESHARK DISPLAY FILTER APPLIED: dns &amp;&amp; ip.src == 192.168.1.45</p>
+          <div class="log-viewer" data-label="capture.pcap">
+<span class="log-line"><span class="dim">Frame 1024</span>: DNS Query  <span class="uri">YWRtaW5AY29tcGFueS5jb20K.exfil.attacker-c2.net</span> <span class="warn">(Type A)</span></span>
+<span class="log-line"><span class="dim">Frame 1025</span>: DNS Query  <span class="uri">cGFzc3dvcmQxMjM0NQo=.exfil.attacker-c2.net</span>     <span class="warn">(Type A)</span></span>
+<span class="log-line"><span class="dim">Frame 1026</span>: DNS Query  <span class="uri">c2VjcmV0a2V5X2FwaQ==.exfil.attacker-c2.net</span>      <span class="warn">(Type A)</span></span>
+<span class="log-line"><span class="dim">Frame 1027</span>: DNS Response: NXDOMAIN ← <span class="notfound">domain does not resolve</span></span>
+<span class="log-line">...</span>
+<span class="log-line"><span class="dim">[+847 similar queries in 10 minutes, all to *.exfil.attacker-c2.net]</span></span>
+          </div>
+
+          <div class="answer-block" style="margin-top:20px">
+            <div class="answer-q">What made this traffic suspicious in Wireshark?</div>
+            <div class="answer-a">Normal DNS query volumes are low (tens per minute). <strong>847 DNS queries in 10 minutes</strong> to a single external domain is a massive anomaly. The subdomains contained <strong>Base64-encoded strings</strong> — a hallmark of DNS tunnelling, where data is encoded into DNS hostnames to bypass firewalls that only block known-bad IPs.</div>
+
+            <div class="answer-q">What do the Base64 subdomains decode to?</div>
+            <div class="answer-a">Decoded: <code>admin@company.com</code>, <code>password12345</code>, <code>secret_key_api</code> — credential and API key data being exfiltrated chunk-by-chunk via DNS queries. Each query carries a small payload encoded in the subdomain label, reconstructed by the attacker's C2 server.</div>
+
+            <div class="answer-q">How was Wireshark used to confirm this?</div>
+            <div class="answer-a">Wireshark's <strong>Statistics → DNS</strong> panel revealed the query rate spike. The display filter <code>dns.qry.name contains "attacker-c2.net"</code> isolated all suspicious queries. Following the <strong>UDP stream</strong> showed the sequential nature of the queries, consistent with automated tunnelling software rather than organic browsing.</div>
+          </div>
+        </div>
+
+        <div class="tab-pane" id="c2-mitre">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="background:var(--surface2);border:1px solid var(--border);padding:18px">
+              <div class="mitre-tags" style="margin-bottom:12px">
+                <span class="mitre-tag"><span class="tid">TA0010</span>Exfiltration</span>
+                <span class="mitre-tag"><span class="tid">T1048.003</span>Exfil Over DNS</span>
+              </div>
+              <p style="font-size:13px;color:var(--text);line-height:1.6">Data exfiltration over DNS (T1048.003) — encoding sensitive data into DNS query hostnames and sending them to an attacker-controlled DNS server that logs the subdomains. DNS traffic is commonly allowed outbound through firewalls, making it a stealthy exfiltration channel.</p>
+            </div>
+            <div style="background:var(--surface2);border:1px solid var(--border);padding:18px">
+              <div class="mitre-tags" style="margin-bottom:12px">
+                <span class="mitre-tag"><span class="tid">TA0011</span>Command &amp; Control</span>
+                <span class="mitre-tag"><span class="tid">T1071.004</span>DNS C2</span>
+              </div>
+              <p style="font-size:13px;color:var(--text);line-height:1.6">The attacker's C2 infrastructure operates over DNS, communicating with the implant on the compromised host via DNS query/response cycles — a technique that evades many traditional network security controls focused on TCP/HTTP.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════
+         CASE 3 — SPLUNK BRUTE FORCE
+    ══════════════════════════════════ -->
+    <div class="case-card medium">
+      <div class="card-header">
+        <div>
+          <div class="card-meta">
+            <span class="severity-badge medium">MEDIUM</span>
+            <span class="case-id">CASE-003 &nbsp;·&nbsp; SIEM Investigation</span>
+          </div>
+          <div class="card-title" style="margin-top:8px">Credential Brute-Force — Splunk SIEM Detection</div>
+        </div>
+        <span class="verdict-badge tp">TRUE POSITIVE</span>
+      </div>
+      <div class="card-body">
+        <div class="tabs">
+          <button class="tab-btn active" onclick="openTab(event,'c3-overview')">Overview</button>
+          <button class="tab-btn" onclick="openTab(event,'c3-spl')">SPL Query</button>
+          <button class="tab-btn" onclick="openTab(event,'c3-analysis')">Analysis</button>
+          <button class="tab-btn" onclick="openTab(event,'c3-mitre')">MITRE ATT&CK</button>
+        </div>
+
+        <div class="tab-pane active" id="c3-overview">
+          <p style="font-size:14px;line-height:1.7;color:var(--text);margin-bottom:20px">
+            A Splunk alert triggered for <strong style="color:var(--text-bright)">multiple failed authentication events</strong> originating from a single external IP within a 5-minute window. Investigation revealed a systematic credential brute-force attack targeting the company's VPN gateway. Cross-referencing with Active Directory logs confirmed the targeted account and a subsequent successful login.
+          </p>
+          <div class="findings-grid">
+            <div class="finding-item">
+              <div class="finding-label">Attack Source</div>
+              <div class="finding-value danger">45.227.18.103</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">Target</div>
+              <div class="finding-value warn">VPN Gateway / AD</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">Failed Attempts</div>
+              <div class="finding-value danger">312 in 5 minutes</div>
+            </div>
+            <div class="finding-item">
+              <div class="finding-label">Successful Login</div>
+              <div class="finding-value danger">YES — j.smith</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane" id="c3-spl">
+          <p style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-bottom:12px;letter-spacing:0.1em">// SPLUNK SPL — FAILED LOGIN SPIKE DETECTION</p>
+          <div class="log-viewer" data-label="Splunk SPL">
+<span class="log-line"><span class="ok">index=windows_security</span> <span class="warn">EventCode=4625</span></span>
+<span class="log-line">| <span class="highlight">stats</span> count AS failed_attempts BY src_ip, TargetUserName</span>
+<span class="log-line">| <span class="highlight">where</span> failed_attempts > 50</span>
+<span class="log-line">| <span class="highlight">sort</span> - failed_attempts</span>
+<span class="log-line"></span>
+<span class="log-line"><span class="dim">-- RESULTS --</span></span>
+<span class="log-line"><span class="ip-att">45.227.18.103</span>  |  j.smith  |  312 failed attempts</span>
+<span class="log-line"><span class="ip-att">45.227.18.103</span>  |  admin    |  87 failed attempts</span>
+<span class="log-line"><span class="ip-att">45.227.18.103</span>  |  svc_acc  |  54 failed attempts</span>
+          </div>
+
+          <p style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin:16px 0 12px;letter-spacing:0.1em">// CROSS-REFERENCE: SUCCESSFUL LOGINS FOLLOWING FAILURES (EventCode=4624)</p>
+          <div class="log-viewer" data-label="Splunk SPL">
+<span class="log-line"><span class="ok">index=windows_security</span> <span class="warn">EventCode=4624</span></span>
+<span class="log-line">  src_ip=<span class="ip-att">45.227.18.103</span></span>
+<span class="log-line">| <span class="highlight">table</span> _time, src_ip, TargetUserName, LogonType, WorkstationName</span>
+<span class="log-line"></span>
+<span class="log-line"><span class="dim">-- RESULTS --</span></span>
+<span class="log-line"><span class="critical-hit">15:47:23 | <span class="ip-att">45.227.18.103</span> | <span class="danger">j.smith</span> | LogonType=3 (Network) | ← SUCCESSFUL BRUTE FORCE</span></span>
+          </div>
+        </div>
+
+        <div class="tab-pane" id="c3-analysis">
+          <div class="answer-block">
+            <div class="answer-q">What triggered the initial Splunk alert?</div>
+            <div class="answer-a">The alert rule was configured to fire when a single source IP generates more than <code>50 EventCode 4625</code> (Windows Failed Logon) events in a 5-minute window. <code>45.227.18.103</code> generated <strong>312 failures</strong> across multiple accounts — well above the threshold, indicating systematic credential stuffing or dictionary attack activity.</div>
+
+            <div class="answer-q">Why is the EventCode 4624 finding so critical?</div>
+            <div class="answer-a">A successful login (EventCode <code>4624</code>) from the same attacking IP, targeting account <code>j.smith</code> — the most heavily targeted account — after 312 failures confirms the brute-force was successful. The attacker now has authenticated access to the network. This elevates the severity and requires <strong>immediate account lockout and password reset</strong> as a minimum response.</div>
+
+            <div class="answer-q">How does Splunk help in this investigation?</div>
+            <div class="answer-a">Splunk's <strong>SPL (Search Processing Language)</strong> enabled fast aggregation across millions of log events. The <code>stats count by src_ip</code> query surfaced the attack pattern in seconds — work that would take hours manually. Correlating the 4625 and 4624 events from the same source IP is the kind of multi-source correlation that makes SIEM indispensable in a SOC.</div>
+          </div>
+        </div>
+
+        <div class="tab-pane" id="c3-mitre">
+          <div style="background:var(--surface2);border:1px solid var(--border);padding:18px">
+            <div class="mitre-tags" style="margin-bottom:12px">
+              <span class="mitre-tag"><span class="tid">TA0006</span>Credential Access</span>
+              <span class="mitre-tag"><span class="tid">T1110.001</span>Brute Force: Password Guessing</span>
+              <span class="mitre-tag"><span class="tid">TA0001</span>Initial Access</span>
+            </div>
+            <p style="font-size:13px;color:var(--text);line-height:1.6">T1110.001 — Brute Force credential attack against a network-accessible authentication portal (VPN). The attacker systematically tried a large number of username/password combinations until one succeeded. The successful authentication (LogonType 3) then provides Initial Access to the internal network.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- TOOLS -->
+  <section class="portfolio-section" id="tools">
+    <div class="section-label">Toolkit</div>
+    <div class="section-title">Tools & Technologies</div>
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <span class="tool-icon">🦈</span>
+        <div class="tool-name">Wireshark</div>
+        <div class="tool-desc">Network protocol analyser used for deep packet inspection, traffic analysis, and forensic investigation of network captures.</div>
+        <div class="tool-skills">
+          <span class="tool-skill">PCAP Analysis</span>
+          <span class="tool-skill">Display Filters</span>
+          <span class="tool-skill">Stream Following</span>
+          <span class="tool-skill">DNS Analysis</span>
+          <span class="tool-skill">Protocol Decoding</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-icon">🔍</span>
+        <div class="tool-name">Splunk</div>
+        <div class="tool-desc">Enterprise SIEM platform used for log ingestion, SPL-based threat hunting, alert creation, and dashboard visualisation.</div>
+        <div class="tool-skills">
+          <span class="tool-skill">SPL Queries</span>
+          <span class="tool-skill">Alert Tuning</span>
+          <span class="tool-skill">Log Correlation</span>
+          <span class="tool-skill">Dashboards</span>
+          <span class="tool-skill">Event Codes</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-icon">🛡️</span>
+        <div class="tool-name">MITRE ATT&CK</div>
+        <div class="tool-desc">Globally-accessible knowledge base of adversary tactics and techniques used to map, classify, and communicate threat findings.</div>
+        <div class="tool-skills">
+          <span class="tool-skill">Tactic Mapping</span>
+          <span class="tool-skill">Technique IDs</span>
+          <span class="tool-skill">Report Writing</span>
+          <span class="tool-skill">Threat Modelling</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-icon">🔥</span>
+        <div class="tool-name">Firewall Logs</div>
+        <div class="tool-desc">Manual analysis of raw firewall logs to identify port scanning, blocked connection attempts, and suspicious traffic patterns.</div>
+        <div class="tool-skills">
+          <span class="tool-skill">Port Scan Detection</span>
+          <span class="tool-skill">Rule Analysis</span>
+          <span class="tool-skill">IOC Extraction</span>
+          <span class="tool-skill">IP Correlation</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-icon">🌐</span>
+        <div class="tool-name">Web Server Logs</div>
+        <div class="tool-desc">Analysis of Apache/Nginx access logs to detect enumeration, web shell activity, and anomalous HTTP methods or user-agents.</div>
+        <div class="tool-skills">
+          <span class="tool-skill">404 Enumeration</span>
+          <span class="tool-skill">User-Agent Analysis</span>
+          <span class="tool-skill">URI Inspection</span>
+          <span class="tool-skill">Status Codes</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <span class="tool-icon">🪟</span>
+        <div class="tool-name">Windows Event Logs</div>
+        <div class="tool-desc">Analysis of Windows Security Event logs (4624, 4625, 4648, etc.) for authentication anomalies and lateral movement indicators.</div>
+        <div class="tool-skills">
+          <span class="tool-skill">Event Code 4625</span>
+          <span class="tool-skill">Event Code 4624</span>
+          <span class="tool-skill">Logon Types</span>
+          <span class="tool-skill">AD Integration</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span style="color:var(--accent)">// </span>SOC ANALYST PORTFOLIO &nbsp;·&nbsp; BUILT WITH LOG ANALYSIS & THREAT INTELLIGENCE &nbsp;·&nbsp; <span style="color:var(--accent)">STAY VIGILANT</span>
+</footer>
+
+<script>
+  function openTab(e, id) {
+    // find parent card-body
+    const cardBody = e.target.closest('.card-body');
+    // deactivate all tabs & panes in this card
+    cardBody.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    cardBody.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    // activate clicked
+    e.target.classList.add('active');
+    document.getElementById(id).classList.add('active');
+  }
+
+  // Smooth scroll nav
+  document.querySelectorAll('nav a').forEach(a => {
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('nav a').forEach(x => x.classList.remove('active'));
+      this.classList.add('active');
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
